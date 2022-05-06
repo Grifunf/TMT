@@ -1,3 +1,5 @@
 #!/bin/bash
 service postgresql start
-tail -f /dev/null
+service apache2 start
+cd /var/www/tmt
+php artisan websockets:serve

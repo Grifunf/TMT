@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Services\GameService;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -18,5 +18,7 @@ Route::get('/', function () {
 });
 
 Route::get('/test', function(){
+    $service = new GameService;
+    $service->CreateGame('test', 5);
     return view('test');
 });

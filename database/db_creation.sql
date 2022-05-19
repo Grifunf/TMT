@@ -90,7 +90,7 @@ CREATE TABLE history
     "pid" uint8,
     "gid" uint8,
     "action" action_t NOT NULL,
-    "ammount" uint2 DEFAULT NULL,
+    "ammount" uint2 0,
     "resource" resource_t DEFAULT NULL,
     PRIMARY KEY("id"),
     FOREIGN KEY("pid") REFERENCES players("id"),

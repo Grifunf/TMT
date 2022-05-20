@@ -3,6 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\GameController;
+use App\Http\Controllers\PlayerController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,6 +17,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+/*
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+*/
+
+Route::get('/lobby', [GameController::class, 'ListGames']);
+Route::put('/lobby', [GameController::class, 'CreateGame']);
+Route::get('/game', [GameController::class, 'GameInfo']);
+Route::post('/game', [GameController::class, 'JoinGame']);
+Route::put('/game', [GameController::class, 'MakeAction']);
+
+Route::put('/player', [PlayerController::class, 'CreatePlayer']);

@@ -67,7 +67,7 @@ CREATE TABLE players
     "id" BIGSERIAL,
     "name" VARCHAR(64) NOT NULL,
     "gid" uint8,
-    "TR" uint2 DEFAULT 20,
+    "tr" uint2 DEFAULT 20,
     "gold" uint2 DEFAULT 0,
     "goldprod" SMALLINT DEFAULT 1,
     "plant" uint2 DEFAULT 0,
@@ -90,9 +90,11 @@ CREATE TABLE history
     "pid" uint8,
     "gid" uint8,
     "action" action_t NOT NULL,
-    "ammount" uint2 0,
+    "ammount" uint2 DEFAULT 0,
     "resource" resource_t DEFAULT NULL,
     PRIMARY KEY("id"),
     FOREIGN KEY("pid") REFERENCES players("id"),
     FOREIGN KEY("gid") REFERENCES games("id")
 );
+
+INSERT INTO games ("id", "name", "maxplayers", "currplayers", "salt", "password") VALUES(0, 'No game', 0, 0, '483iuc1kH9wsy9SM', '06ab7d59e635a9942603cdd749849bb444b7a1f9c1a4931e00b5f53111476712b6a96ca7fe4b1ab00b681b26e606f4343b7ff3a6b93f8300b6d21618119aeaaf');

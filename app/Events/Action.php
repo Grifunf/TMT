@@ -10,13 +10,15 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class GameAdded implements ShouldBroadcast
+class Action implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public int $id;
-    public string $name;
-    public int $maxplayers;
+    public int $pid;
+    public string $action;
+    public string $resource;
+    public int $ammount;
 
     /**
      * Create a new event instance.
@@ -25,17 +27,19 @@ class GameAdded implements ShouldBroadcast
      * @param int $maxplayers Maximum number of allowed players
      * @return void
      */
-    public function __construct(int $id, string $name, int $maxplayers)
+    public function __construct(int $id, int $pid, string $action, string $resource, int $ammount)
     {
         $this->id = $id;
-        $this->name = $name;
-        $this->maxplayers = $maxplayers;
+        $this->pid = $pid;
+        $this->action = $action;
+        $this->resource = $resource;
+        $this->ammount = $ammount;
     }
 
     /**
      * Get the channels the event should broadcast on.
      * @return \Illuminate\Broadcasting\Channel|array
      */
-    public function broadcastOn() { return new Channel('lobby'); }
+    public function broadcastOn() { return new Channel('room_' . $this->id); }
 
 }

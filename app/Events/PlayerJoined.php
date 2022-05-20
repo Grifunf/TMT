@@ -14,9 +14,9 @@ class PlayerJoined implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $id;
-    public $nickname;
-    public $players;
+    public int $id;
+    public string $nickname;
+    public int $players;
 
     /**
      * Create a new event instance.

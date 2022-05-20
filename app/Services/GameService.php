@@ -8,8 +8,11 @@ use App\Models\History;
 
 use App\Events\GameAdded;
 use App\Events\PlayerJoined;
+use App\Events\GameUpdate;
+use App\Events\Action;
 
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class for handling player logic on our app
@@ -18,12 +21,19 @@ class GameService
 {
     /**
      * Add a new game room into the database
+     * @param int $pid Player's id that is creating the game
      * @param string $name user specified name for the game room
      * @param int $maxplayer Specified limit to the number of players
      * @param string $password User specified password (aka "PIN")
+     * @return int the id of the newly created game
      */
-    public function CreateGame(string $name, int $maxplayers, string $password = null): void
+    public function CreateGame(int $pid, string $name, int $maxplayers, string $password = null): int
     {
+        $players = Player::where('id', '=', $pid);
+        if($players->count() != 1)
+            return 0;
+        
+        //Create game
         $game = new Game;
         $game->name = $name;
         $game->maxplayers = $maxplayers;
@@ -38,9 +48,15 @@ class GameService
             $game->salt = '';
             $game->password = '';
         }
-
         $game->save();
+        
+        //Update player's gid
+        $player = $players->first();
+        $player->gid = $game->id;
+        $player->save();
+        //Broadcast event
         GameAdded::dispatch($game->id, $name, $maxplayers);
+        return $game->id;
     }
 
     /**
@@ -89,6 +105,7 @@ class GameService
             ]);
         
         //Broadcast events
+        $player = $players->first();
         PlayerJoined::dispatch($id, $player->name, $game->currplayers);//In room event
         GameUpdate::dispatch($id, $game->currplayers);//Lobby event
         return true;
@@ -105,6 +122,24 @@ class GameService
             ->where('id', '!=', 0)
             ->orderBy('name')
             ->get();
+    }
+
+    /**
+     * Get all in-game information about
+     * @return array
+     */
+    public function GetInfo(int $id): array
+    {
+        $games = Game::where('id', '=', $id)->where('id', '!=', 0);
+        if($games->count() != 1)
+            return array('error' => "Couldn't find the specified game.");
+        $generation = $games->first()->gen;
+
+        $players = Player::where('gid', '=', $id)->orderBy('name')->get();
+        return array(
+            'gen' => $generation,
+            'players' => $players
+        );
     }
 
     /**
@@ -150,7 +185,10 @@ class GameService
                 break;
             case 'ADD':
             case 'REMOVE':
-                $flag = SimpleAction($player, $resource, $ammount);
+                if($resource === null || $ammount === 0)
+                    $flag = false;
+                else
+                    $flag = SimpleAction($player, $resource, $ammount);
                 break;
             case 'PRODUCE':
                 $flag = Produce($player);
@@ -163,7 +201,7 @@ class GameService
             return false;
 
         //Broadcast message
-
+        Action::dispatch($id, $pid, $action , $resource, $ammount);
         return true;
     }
 
@@ -258,7 +296,7 @@ class GameService
      * @param Player $player The player that is making the action
      * @return bool True if player meets the requirements for action, false otherwise
      */
-    private function TemperatureWithHeat(Player $player): bool
+    private function GreeneryWithLeafs(Player $player): bool
     {
         if($player->plant < 8)
             return false;
@@ -275,7 +313,12 @@ class GameService
      */
     private function SimpleAction(Player $player, string $resource, int $ammount)
     {
-        return false;
+        if(!property_exists($player, $resource))
+            return false;
+        if($player->$resource + $ammount < 0)
+            return false;
+        $player->$resource += $ammount;
+        return true;
     }
 
     //Not implemented yet

@@ -14,8 +14,8 @@ class GameUpdate implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $id;
-    public $players;
+    public int $id;
+    public int $players;
 
     /**
      * Create a new event instance.

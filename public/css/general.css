@@ -1,0 +1,100 @@
+html { height: 100%; }
+body { height: 100%; }
+.full-height { height: calc(100% - 56px); }
+.fh { height: 100%; }
+
+.list-bare-item { list-style-type: none; }
+
+.center-content
+{
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical;
+    -webkit-box-pack: center;
+    height: 100%;
+}
+
+.center
+{
+    display: -webkit-box;
+    -webkit-box-orient: horizontal;
+    -webkit-box-pack: center;
+}
+
+.form
+{
+  max-width: 460px;
+  border-radius: 12px;
+  border: 1px solid #ced4da;
+  padding: 0px 32px;
+  margin: auto;
+  background-color: #ffffff;
+}
+
+.btn-block { width: 100%; }
+.btn-circle
+{
+    display: inline-block;
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    width: 56px;
+    height: 56px;
+    padding: 3px 9px;
+    border-radius: 50%;
+    box-shadow: 0px 6px 10px 0px rgba(0,0,0,0.14),0px 1px 18px 0px rgba(0,0,0,0.12),0px 3px 5px -1px rgba(0,0,0,0.2);
+    background-color: #ffffff;
+    z-index: 1;
+}
+
+.fa-plus { font-size: 24px; }
+
+.card-general
+{
+    width: 99%;
+    min-width: 320px;
+    max-width: 460px;
+}
+
+.card-res
+{
+    width: 99%;
+    min-width: 80px;
+    max-width: 230px;
+}
+
+.modal-content
+{
+    border: none;
+    background-color: transparent;
+}
+
+.btn-modal-close
+{
+    position: absolute;
+    right: 36px;
+}
+
+.reslogo
+{
+    width: 64px;
+    margin: auto;
+}
+
+.project-icon { height: 32px; }
+.arrow-icon { width: 64px; }
+
+.project-card { display: inline-flex; }
+
+.centered
+{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.pay
+{
+    position: relative;
+    width: 32px;
+}

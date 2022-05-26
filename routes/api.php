@@ -23,10 +23,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 */
 
-Route::get('/lobby', [GameController::class, 'ListGames']);
-Route::put('/lobby', [GameController::class, 'CreateGame']);
-Route::get('/game', [GameController::class, 'GameInfo']);
-Route::post('/game', [GameController::class, 'JoinGame']);
-Route::put('/game', [GameController::class, 'MakeAction']);
+Route::middleware('verify.registration')->group(function (){
+    Route::get('/lobby', [GameController::class, 'ListGames']);
+    Route::put('/lobby', [GameController::class, 'CreateGame']);
+    Route::get('/game', [GameController::class, 'GameInfo']);
+    Route::post('/game', [GameController::class, 'JoinGame']);
+    Route::put('/game', [GameController::class, 'MakeAction']);
+});
 
-Route::put('/player', [PlayerController::class, 'CreatePlayer']);
+
+Route::put('/register', [PlayerController::class, 'CreatePlayer']);

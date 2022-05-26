@@ -55,7 +55,7 @@ class GameService
         $player->gid = $game->id;
         $player->save();
         //Broadcast event
-        GameAdded::dispatch($game->id, $name, $maxplayers);
+        GameAdded::dispatch($game->id, $name, $maxplayers, $game->salt !== '');
         return $game->id;
     }
 

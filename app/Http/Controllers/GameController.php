@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Cookie;
 use Illuminate\Http\Request;
 use App\Services\GameService;
 
@@ -38,14 +39,14 @@ class GameController extends Controller
     /**
      * Adds a new game to the list of active games
      * @param Illuminate\Http\Request $req Object containing the http request that made to the server
-     * @return array json object containing the result payload
+     * @return Illuminate\Http\Response json object containing the result payload
      */
-    public function CreateGame(Request $req): array
+    public function CreateGame(Request $req)
     {
-        if(!$req->filled('id') || !$req->filled('name') || !$req->filled('maxplayers'))
-            return array('error' => "Name, Player's id and maxplayers must be specified.");
+        $pid = $req->cookie('pid');
+        if(!$req->filled('name') || !$req->filled('maxplayers'))
+            return array('error' => "Name and maxplayers must be specified.");
         
-        $pid = intval($req->input('id'));
         $name = $req->input('name');
         $maxplayers = $req->input('maxplayers');
         $password = null;
@@ -55,7 +56,9 @@ class GameController extends Controller
         $id = $this->service->CreateGame($pid, $name, $maxplayers, $password);
         if($id === 0)
             return array('error' => "Couldn't find user with the specified id.");
-        return array('id' => $id);
+        return response()
+            ->json(['code' => 'success'])
+            ->cookie(Cookie::forever('gid', $id));
     }
 
     /**
@@ -65,11 +68,11 @@ class GameController extends Controller
      */
     public function JoinGame(Request $req): array
     {
-        if(!$req->filled('gid') || !$req->filled('pid'))
-            return array('error' => 'Game and Player id must be specified.');
+        $pid = $req->cookie('pid');
+        if(!$req->filled('gid'))
+            return array('error' => "Game's id must be specified.");
         
         $gid = intval($req->input('gid'));
-        $pid = intval($req->input('pid'));
         $password = null;
         if($req->filled('password'))
             $password = $req->input('password');

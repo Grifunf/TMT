@@ -13,12 +13,9 @@ use App\Services\GameService;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::middleware('verify.registration')->group(function () {
+    Route::get('/', function () { return view('home'); });
+    Route::get('/game', function() { return view('game'); });
 });
 
-Route::get('/test', function(){
-    $service = new GameService;
-    $service->CreateGame('test', 5);
-    return view('test');
-});
+Route::get('/register', function() { return view('register'); });

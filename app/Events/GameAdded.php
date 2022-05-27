@@ -17,6 +17,7 @@ class GameAdded implements ShouldBroadcast
     public int $id;
     public string $name;
     public int $maxplayers;
+    public bool $haspass;
 
     /**
      * Create a new event instance.
@@ -25,11 +26,12 @@ class GameAdded implements ShouldBroadcast
      * @param int $maxplayers Maximum number of allowed players
      * @return void
      */
-    public function __construct(int $id, string $name, int $maxplayers)
+    public function __construct(int $id, string $name, int $maxplayers, bool $haspass)
     {
         $this->id = $id;
         $this->name = $name;
         $this->maxplayers = $maxplayers;
+        $this->haspass = $haspass;
     }
 
     /**

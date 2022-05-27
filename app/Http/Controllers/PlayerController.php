@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Cookie;
 use Illuminate\Http\Request;
 use App\Services\PlayerService;
 
@@ -27,6 +28,8 @@ class PlayerController extends Controller
             return array('error' => 'Nickname must be between 1 and 64 characters');
         
         $id = $this->service->CreatePlayer($nickname);
-        return array('id' => $id);
+        return response()
+            ->json(['code' => 'success'])
+            ->cookie(Cookie::forever('pid', $id));
     }
 }
